@@ -4,6 +4,7 @@ const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 const Profile = require("../models/Profile");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
 require("dotenv").config();
 // sendotp
 exports.sendOtp = async (req, res) => {
@@ -183,7 +184,7 @@ exports.login = async (req, res) => {
       const payload = {
         email: user.email,
         id: user._id,
-        role: user.role,
+        accountType: user.accountType,
       };
       let token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "2h",
@@ -216,7 +217,7 @@ exports.login = async (req, res) => {
 };
 
 //* changePassword controller
-/*
+
 exports.changePassword = async (req, res) => {
   try {
     // fetch data from req body -> oldpassword, newPassword, confirmPassword
@@ -234,11 +235,52 @@ exports.changePassword = async (req, res) => {
         message: `password dont match`,
       });
     }
-    // update password
-    // send mail
-    // return response
-  } catch (error) {}
-};
+    // hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // get token from cookies
+    const token =
+      req.cookies.token || req.header("Authorization").replace("Bearer", "");
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: `token missing`,
+      });
+    }
 
-// resetPassword
-*/
+    // decode token
+    try {
+      const decode = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("token decode--", decode);
+      req.user = decode;
+    } catch (error) {
+      return res.status(501).json({
+        success: false,
+        message: `error decoding token: ${error}`,
+      });
+    }
+    // update password
+    const updatePassword = await User.findOneAndUpdate(
+      { email: req.user.email },
+      {
+        password: hashedPassword,
+      },
+      { new: true }
+    );
+    // send mail
+    await mailSender(
+      req.user.email,
+      "password changed",
+      "your password has been changed successfully"
+    );
+    // return response
+    return res.status(200).json({
+      success: true,
+      message: `password changed successfully`,
+    });
+  } catch (error) {
+    return res.status(501).json({
+      success: false,
+      message: `something went wrong changing password: ${error.message}`,
+    });
+  }
+};
