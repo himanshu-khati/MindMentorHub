@@ -6,6 +6,7 @@ const Profile = require("../models/Profile");
 const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
 require("dotenv").config();
+
 // sendotp
 exports.sendOtp = async (req, res) => {
   try {
@@ -112,7 +113,7 @@ exports.signUp = async (req, res) => {
 
     // validate otp
     if (recentOtp.length === 0) {
-      // otp not founf
+      // otp not found
       return res.status(400).json({
         success: false,
         message: `otp not foind`,
@@ -220,6 +221,7 @@ exports.login = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
+    const { id, email } = req.user;
     // fetch data from req body -> oldpassword, newPassword, confirmPassword
     const { oldPassword, newPassword, confirmPassword } = req.body;
     // validation
@@ -238,29 +240,10 @@ exports.changePassword = async (req, res) => {
     // hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     // get token from cookies
-    const token =
-      req.cookies.token || req.header("Authorization").replace("Bearer", "");
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: `token missing`,
-      });
-    }
 
-    // decode token
-    try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("token decode--", decode);
-      req.user = decode;
-    } catch (error) {
-      return res.status(501).json({
-        success: false,
-        message: `error decoding token: ${error}`,
-      });
-    }
     // update password
-    const updatePassword = await User.findOneAndUpdate(
-      { email: req.user.email },
+    await User.findByIdAndUpdate(
+      id,
       {
         password: hashedPassword,
       },
@@ -268,7 +251,7 @@ exports.changePassword = async (req, res) => {
     );
     // send mail
     await mailSender(
-      req.user.email,
+      email,
       "password changed",
       "your password has been changed successfully"
     );
