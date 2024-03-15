@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Tag = require("../models/Tag");
+const Category = require("../models/Category");
 const User = require("../models/User");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
@@ -7,8 +7,13 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createCourse = async (req, res) => {
   try {
     // get data from request
-    const { courseSchema, courseDescription, whatYouWillLearn, price, tag } =
-      req.body;
+    const {
+      courseSchema,
+      courseDescription,
+      whatYouWillLearn,
+      price,
+      category,
+    } = req.body;
     //   get thumbnail
     const thumbnail = req.files.thumbnailImage;
     // validation
@@ -17,7 +22,7 @@ exports.createCourse = async (req, res) => {
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      !tag
+      !category
     ) {
       return res.status(401).json({
         success: false,
@@ -34,12 +39,12 @@ exports.createCourse = async (req, res) => {
         message: `instructor details not found`,
       });
     }
-    // check given tag valid or not
-    const tagDetails = await Tag.findById(tag);
-    if (!tagDetails) {
+    // check given categor valid or not
+    const categoryDetails = await Category.findById(category);
+    if (!categoryDetails) {
       return res.status(401).json({
         success: false,
-        message: `tag details not found`,
+        message: `Category details not found`,
       });
     }
 
@@ -56,7 +61,7 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       whatYouWillLearn,
       price,
-      tag: tagDetails._id,
+      category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
     });
 
@@ -73,9 +78,9 @@ exports.createCourse = async (req, res) => {
       }
     );
 
-    // update tag schema
-    await Tag.findByIdAndUpdate(
-      { _id: tagDetails._id },
+    // update category schema
+    await Category.findByIdAndUpdate(
+      { _id: categoryDetails._id },
       { $push: { course: newCourse._id } },
       { new: true }
     );
