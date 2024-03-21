@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const Course = require("../models/Course");
 // create category handler
 exports.createCategory = async (req, res) => {
   try {
@@ -44,6 +45,50 @@ exports.getAllCategory = async (req, res) => {
     return res.status(501).json({
       success: false,
       message: `something went wrong fetching category: ${error.message}`,
+    });
+  }
+};
+
+// category page details
+exports.categoryPageDetails = async (req, res) => {
+  try {
+    // get category id
+    const { categoryId } = req.body;
+    // fetch  all courses associated with specified category id
+    const selectedCategory = await Category.findById(categoryId)
+      .populate("courses")
+      .exec();
+    // validation
+    if (!selectedCategory) {
+      return res.status(404).json({
+        success: false,
+        message: `data not found`,
+      });
+    }
+    // get courses for different category
+    const differentCategories = await Category.find({
+      _id: { $ne: categoryId },
+    })
+      .populate("courses")
+      .exec();
+    // get top selling courses
+    const topSellingCourses = await Course.find()
+      .populate("studentsEnrolled")
+      .sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length);
+
+    // return response
+    return res.status(200).json({
+      success: true,
+      data: {
+        selectedCategory,
+        differentCategories,
+        topSellingCourses,
+      },
+    });
+  } catch (error) {
+    return res.status(201).json({
+      success: false,
+      message: `something went wrong fetching category page details: ${error.message}`,
     });
   }
 };
