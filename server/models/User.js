@@ -21,7 +21,6 @@ const userSchmea = new mongoose.Schema({
   },
   contactNumber: {
     type: Number,
-    required: true,
   },
   accountType: {
     type: String,
@@ -31,6 +30,14 @@ const userSchmea = new mongoose.Schema({
   additionalDetails: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Profile",
+  },
+  active: {
+    type: Boolean,
+    default: true,
+  },
+  approved: {
+    type: Boolean,
+    default: true,
   },
   courses: [
     {
@@ -50,7 +57,7 @@ const userSchmea = new mongoose.Schema({
   },
   courseProgress: [
     {
-      type: mongoose.Schema.Types.courseProgress,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "CourseProgress",
     },
   ],

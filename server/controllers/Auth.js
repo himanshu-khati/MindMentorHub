@@ -52,13 +52,12 @@ exports.sendOtp = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: `something went wrong while generating otp ${error.message}`,
     });
   }
 };
 
 // signup
-
 exports.signUp = async (req, res) => {
   try {
     // fetch data
@@ -106,19 +105,19 @@ exports.signUp = async (req, res) => {
 
     // find most recent otp
 
-    const recentOtp = await Otp.find(
-      { email }.sort({ createdAt: -1 }).limit(1)
-    );
-    console.log(recentOtp);
+    const recentOtp = await Otp.find({ email })
+      .sort({ createdAt: -1 })
+      .limit(1);
+    console.log("recentotp:", recentOtp);
 
     // validate otp
     if (recentOtp.length === 0) {
       // otp not found
       return res.status(400).json({
         success: false,
-        message: `otp not foind`,
+        message: `otp not valid`,
       });
-    } else if (otp !== recentOtp) {
+    } else if (otp !== recentOtp[0].otp) {
       return res.status(400).json({
         success: false,
         message: `otp don't match`,
@@ -127,6 +126,11 @@ exports.signUp = async (req, res) => {
     // hash password
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    // create user
+    let approved = "";
+    approved === "instructor" ? (approved = false) : (approved = true);
+
+    // create additional details for user
     const profileDetails = await Profile.create({
       gender: null,
       dateofbirth: null,
@@ -141,13 +145,14 @@ exports.signUp = async (req, res) => {
       contactNumber,
       password: hashedPassword,
       accountType,
+      approved: approved,
       additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${firstName} ${lastName}`,
     });
     // return response
     return res.status(200).json({
       success: true,
-      message: `uer registered succesfully`,
+      message: `user registered succesfully`,
       user,
     });
   } catch (error) {
@@ -228,7 +233,7 @@ exports.changePassword = async (req, res) => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(401).json({
         success: false,
-        message: `enter all fields`,
+        message: ` all fields are required`,
       });
     }
     if (newPassword !== confirmPassword) {
@@ -237,6 +242,25 @@ exports.changePassword = async (req, res) => {
         message: `password dont match`,
       });
     }
+    // check if oldpassword is correct
+    const userDetails = await User.findById(id);
+    if (!userDetails) {
+      return res.status(401).json({
+        success: false,
+        message: `user don't exist`,
+      });
+    }
+    const checkPassword = await bcrypt.compare(
+      oldPassword,
+      userDetails.password
+    );
+    if (!checkPassword) {
+      return res.status(401).json({
+        success: false,
+        message: `incorrect password`,
+      });
+    }
+
     // hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     // get token from cookies

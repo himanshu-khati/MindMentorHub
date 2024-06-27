@@ -30,8 +30,8 @@ exports.resetPasswordToken = async (req, res) => {
     await mailSender(email, "reset mindMentorHub password", url);
     // return response
     return res.status(200).json({
-      success: false,
-      message: `password changed successfully`,
+      success: true,
+      message: `mail sent successfully`,
     });
   } catch (error) {
     return res.status.json({
@@ -43,7 +43,7 @@ exports.resetPasswordToken = async (req, res) => {
 
 //* reset password
 
-exports.resetPasswordToken = async (req, res) => {
+exports.resetPassword = async (req, res) => {
   try {
     // fetch data from request body
     const { password, confirmPassword, token } = req.body;

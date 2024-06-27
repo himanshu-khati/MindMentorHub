@@ -24,16 +24,22 @@ const sendVerificationEmail = async (email, otp) => {
       "verification email from MindMentorHub",
       otp
     );
-    console.log("email send successfully");
+    console.log("email sent successfully");
   } catch (error) {
     console.log(`error occured while sending email: ${error}`);
     throw error;
   }
 };
 
-otpSchema.pre("save", async (next) => {
-  await sendVerificationEmail(this.email, this.otp);
-  next();
+otpSchema.pre("save", async function(next) {
+  try {
+    await sendVerificationEmail(this.email, this.otp);
+    console.log("Email sent successfully");
+    next();
+  } catch (error) {
+    console.log(`Error occurred while sending email: ${error}`);
+    next(error);
+  }
 });
 
-module.exports = mongoose.Model("Otp", otpSchema);
+module.exports = mongoose.model("Otp", otpSchema);

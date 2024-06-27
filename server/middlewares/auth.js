@@ -22,7 +22,7 @@ exports.auth = async (req, res, next) => {
       console.log(decode);
       req.user = decode;
     } catch (error) {
-      return ews.status(401).json({
+      return res.status(401).json({
         success: false,
         message: `token is invalid ${error.message}`,
       });

@@ -41,11 +41,11 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
-  tags: [
-    {
-      type: String,
-    },
-  ],
+  tag: {
+    type: [String],
+    required: true,
+  },
+
   studentsEnrolled: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -53,6 +53,14 @@ const courseSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  status: {
+    type: String,
+    enum: ["draft", "published"],
+  },
 });
 
 module.exports = mongoose.model("Course", courseSchema);

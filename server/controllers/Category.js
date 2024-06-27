@@ -17,7 +17,7 @@ exports.createCategory = async (req, res) => {
     });
     console.log("category details:", categoryDetails);
     return res.status(200).json({
-      success: false,
+      success: true,
       message: `category created successfully`,
     });
   } catch (error) {
@@ -56,7 +56,11 @@ exports.categoryPageDetails = async (req, res) => {
     const { categoryId } = req.body;
     // fetch  all courses associated with specified category id
     const selectedCategory = await Category.findById(categoryId)
-      .populate("courses")
+      .populate({
+        path: "courses",
+        match: { status: "published" },
+        polulate: "ratingsAndReviews",
+      })
       .exec();
     // validation
     if (!selectedCategory) {
