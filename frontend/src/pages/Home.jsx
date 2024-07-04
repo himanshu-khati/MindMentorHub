@@ -2,7 +2,12 @@ import CodeBlocks from "../components/core/HomePage/CodeBlocks";
 import HeroSection from "../components/core/HomePage/HeroSection";
 import HighlightText from "../components/core/HomePage/HighlightText";
 import VideoSection from "../components/core/HomePage/VideoSection";
+import ExploreCourses from "../components/core/HomePage/ExploreCourses";
 import { FaArrowRight } from "react-icons/fa6";
+import OurValues from "../components/core/HomePage/OurValues";
+import Timeline from "../components/core/HomePage/Timeline";
+import Learn from "../components/core/HomePage/Learn";
+import Instructor from "../components/core/HomePage/Instructor";
 
 const Home = () => {
   return (
@@ -10,16 +15,14 @@ const Home = () => {
       <HeroSection />
       <VideoSection />
       <CodeBlocks
-        position={"flex-row"}
+        position="flex-row"
         heading={
           <div className="text-4xl font-semibold">
             Unlock your <HighlightText text={"coding potential"} /> with our
             online couses.
           </div>
         }
-        subHeading={
-          "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
-        }
+        subHeading="Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
         btnValue={[
           {
             text: "Try it Yourself",
@@ -64,6 +67,13 @@ const Home = () => {
         backgroundGradient={<div className="codeblock2 absolute"></div>}
         codeColor={"text-white"}
       />
+      <div className="bg-pure-greys-5 text-richblack-700 w-screen flex flex-col gap-5">
+        <ExploreCourses />
+        <OurValues />
+        <Timeline />
+        <Learn />
+      </div>
+      <Instructor />
       {/* section 3 */}
       {/* footer */}
     </div>

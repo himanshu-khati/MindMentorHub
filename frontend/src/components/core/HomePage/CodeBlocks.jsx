@@ -62,10 +62,10 @@ export default CodeBlocks;
 
 CodeBlocks.propTypes = {
   position: PropTypes.string.isRequired,
-  heading: PropTypes.elementType.isRequired,
+  heading: PropTypes.node.isRequired,
   subHeading: PropTypes.string.isRequired,
   btnValue: PropTypes.array.isRequired,
   codeBlock: PropTypes.string.isRequired,
   codeColor: PropTypes.string.isRequired,
-  backgroundGradient: PropTypes.string.isRequired,
+  backgroundGradient: PropTypes.node.isRequired,
 };

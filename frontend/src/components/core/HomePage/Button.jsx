@@ -8,7 +8,7 @@ const Button = ({ text, active, link, icon: Icon }) => {
           active ? "bg-yellow-50 text-black " : "bg-richblack-800"
         } hover:shadow-none hover:scale-95 transition-all duration-200 `}
       >
-        {text}
+        <div className="text-nowrap">{text}</div>
         {Icon && <Icon />}
       </div>
     </Link>
