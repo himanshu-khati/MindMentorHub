@@ -12,12 +12,14 @@ const CodeBlocks = ({
   backgroundGradient,
 }) => {
   return (
-    <div className={`flex ${position} my-20 justify-between gap-10`}>
+    <div className={`flex ${position} my-20 justify-between flex-col lg:gap-10 gap-10`}>
       {/* section1 */}
-      <div className="w-[50%] flex flex-col gap-8">
+      <div className="w-[100%] lg:w-[50%] flex flex-col gap-8">
         {heading}
-        <div className="text-richblack-300 font-bold">{subHeading}</div>
-        <div className="flex gap-7">
+        <div className="text-richblack-300 text-base font-bold w-[85%] -mt-3">
+          {subHeading}
+        </div>
+        <div className="flex gap-7 mt-7">
           {btnValue.map((button) => (
             <Button
               key={button.text}

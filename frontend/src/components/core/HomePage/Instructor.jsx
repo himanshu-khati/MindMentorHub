@@ -4,7 +4,7 @@ import Button from "./Button";
 import HighlightText from "./HighlightText";
 const Instructor = () => {
   return (
-    <div className="w-11/12 flex max-w-maxContent  gap-20 items-center  mx-auto my-10 ">
+    <div className="flex flex-col lg:flex-row gap-20 items-center">
       {/* image */}
       <div className="lg:w-[50%]">
         <img

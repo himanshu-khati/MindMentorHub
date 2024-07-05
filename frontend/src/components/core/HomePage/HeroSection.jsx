@@ -17,15 +17,13 @@ const HeroSection = () => {
         Empower Your Future with
         <HighlightText text={"Coding Skills"} />
       </div>
-      <div className="w-11/12">
-        <p className="text-center">
+      <div className="w-9/11 text-center text-lg font-bold text-richblack-300">
           With our online coding courses, you can learn at your own pace, from
           anywhere in the world, and get access to a wealth of resources,
           including hands-on projects, quizzes, and personalized feedback from
           instructors.
-        </p>
       </div>
-      <div className="flex gap-7">
+      <div className="mt-8 flex gap-7">
         <Button text={"Learn More"} link={"/signup"} active={true} />
         <Button text={"Book a Demo"} link={"/login"} active={false} />
       </div>
