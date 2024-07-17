@@ -20,7 +20,7 @@ const Timeline = () => {
                 </div>
               </div>
               <div
-                className={`h-14 border-dotted border-r border-richblack-100 bg-richblack-400/0 w-6 hidden ${
+                className={`h-14 border-dotted border-r border-richblack-100 bg-richblack-400/0 w-6 hidden  lg:${
                   index === TIMELINE.length - 1 ? "hidden" : "block"
                 } `}
               ></div>

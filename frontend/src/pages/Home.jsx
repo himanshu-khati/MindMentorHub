@@ -9,6 +9,8 @@ import OurValues from "../components/core/HomePage/OurValues";
 import Timeline from "../components/core/HomePage/Timeline";
 import Learn from "../components/core/HomePage/Learn";
 import Instructor from "../components/core/HomePage/Instructor";
+import Reviews from "../components/core/HomePage/Reviews";
+import Footer from "../components/common/Footer";
 
 const Home = () => {
   return (
@@ -71,7 +73,7 @@ const Home = () => {
         />
         <ExploreCourses />
       </div>
-      
+
       <div className="bg-pure-greys-5 text-richblack-700">
         <ExploreCoursesCta />
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 ">
@@ -82,9 +84,9 @@ const Home = () => {
       </div>
       <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
         <Instructor />
+        <Reviews />
       </div>
-      {/* section 3 */}
-      {/* footer */}
+      <Footer />
     </div>
   );
 };

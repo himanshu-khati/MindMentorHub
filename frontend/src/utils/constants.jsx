@@ -164,3 +164,26 @@ export const HOME_PAGE_EXPLORE = [
     ],
   },
 ];
+export const NAVBAR_LINKS = [
+  {
+    title: "Home",
+    path: "/",
+  },
+  {
+    title: "Catalog",
+    // path: '/catalog',
+  },
+  {
+    title: "About Us",
+    path: "/about",
+  },
+  {
+    title: "Contact Us",
+    path: "/contact",
+  },
+];
+export const ACCOUNT_TYPE = {
+  student: "student",
+  instructor: "instructor",
+  admin: "admin",
+};
